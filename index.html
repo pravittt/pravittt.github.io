@@ -14,35 +14,49 @@
             height: 100vh;
             overflow: hidden;
         }
-       
+        
         #terminal {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-       
+    max-width: 800px;
+    margin: 0 auto;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #121212;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+}
+        
         #header {
             margin-bottom: 20px;
             color: #4CAF50;
         }
-       
+        
         #output {
             flex-grow: 1;
             overflow-y: auto;
             margin-bottom: 10px;
             line-height: 1.5;
         }
-       
+        #output::-webkit-scrollbar {
+    width: 8px;
+}
+#output::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+#output::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+        
         #input-line {
             display: flex;
             align-items: center;
         }
-       
+        
         #prompt {
             color: #4CAF50;
             margin-right: 10px;
         }
-       
+        
         #command-input {
             background-color: transparent;
             border: none;
@@ -53,50 +67,74 @@
             outline: none;
             flex-grow: 1;
         }
-       
+        
         .command {
             color: #4CAF50;
             font-weight: bold;
         }
-       
+        
         .error {
             color: #f44336;
         }
-       
+        
         .info {
             color: #2196F3;
         }
-       
+        
         .success {
             color: #4CAF50;
         }
-       
+        
         a {
             color: #FF9800;
             text-decoration: none;
         }
-       
+        
         a:hover {
             text-decoration: underline;
         }
+        #output div {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
     </style>
 </head>
 <body>
     <div id="terminal">
         <div id="header">
             <pre>
-  _______  ______ _____  _____ _   _  _____ _____ ___________
- |  ___\ \/ /  _ \_   _|/  ___| | | ||  ___|  ___|  _  \ ___ \
- | |__  \  /| |_) || |  \ `--.| | | || |__ | |__ | | | | |_/ /
- |  __| /  \|  _ < | |   `--. \ | | ||  __||  __|| | | |    /
- | |___/ /\ \ |_) || |_ /\__/ / |_| || |___| |___| |/ /| |\ \
- \____/_/  \_\___/ \___/\____/ \___/ \____/\____/|___/ \_| \_|
+ 
+
+░▒▓███████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓████████▓▒░       
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░           
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░           
+░▒▓███████▓▒░░▒▓███████▓▒░░▒▓████████▓▒░░▒▓█▓▒▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░           
+░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▓█▓▒░ ░▒▓█▓▒░  ░▒▓█▓▒░           
+░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▓█▓▒░ ░▒▓█▓▒░  ░▒▓█▓▒░           
+░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░  ░▒▓██▓▒░  ░▒▓█▓▒░  ░▒▓█▓▒░           
+                                                                               
+                                                                               
+░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓████████▓▒░     ░▒▓█▓▒░░▒▓██████▓▒░  
+   ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░            ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+   ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░            ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+   ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓██████▓▒░       ░▒▓█▓▒░▒▓████████▓▒░ 
+   ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+   ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+   ░▒▓█▓▒░    ░▒▓██████▓▒░   ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
+                                                                               
+                                                                               
+
+
+  
             </pre>
             <p>Welcome to my interactive terminal. Type 'help' to see available commands.</p>
         </div>
-       
+        
         <div id="output"></div>
-       
+        
         <div id="input-line">
             <span id="prompt">$</span>
             <input type="text" id="command-input" autofocus>
@@ -106,16 +144,16 @@
     <script>
         const output = document.getElementById('output');
         const commandInput = document.getElementById('command-input');
-       
+        
         // Your personal information
         const info = {
-            name: "John Doe",
+            name: "Pravit Tuteja",
             title: "Software Developer",
             location: "San Francisco, CA",
-            email: "john.doe@example.com",
-            website: "https://johndoe.dev",
-            github: "https://github.com/johndoe",
-            linkedin: "https://linkedin.com/in/johndoe",
+            email: "pravit.tuteja@example.com",
+            website: "https://pravit.dev",
+            github: "https://github.com/pravit",
+            linkedin: "https://linkedin.com/in/pravit",
             skills: ["JavaScript", "Python", "React", "Node.js", "Docker"],
             projects: [
                 {name: "Terminal Portfolio", description: "This very website!"},
@@ -130,15 +168,15 @@
                 {role: "Junior Developer", company: "Startup Inc", duration: "2018-2020"}
             ]
         };
-       
+        
         // Available commands
         const commands = {
             help: {
                 description: "Show available commands",
                 execute: () => {
-                    let helpText = "Available commands:\n";
+                    let helpText = "Available commands:\n\n";
                     for (const cmd in commands) {
-                        helpText += `<span class="command">${cmd}</span> - ${commands[cmd].description}\n`;
+                        helpText += `<span class="command">${cmd}</span> - ${commands[cmd].description}\n\n`;
                     }
                     return helpText;
                 }
@@ -207,25 +245,32 @@ LinkedIn: <a href="${info.linkedin}" target="_blank">${info.linkedin}</a>
                     output.innerHTML = '';
                     return '';
                 }
-            }
+            },
+            resume: {
+    description: "Download my resume",
+    execute: () => {
+        return `Download here: <a href="/assets/resume.pdf" target="_blank">My Resume</a>`;
+    }
+}
+
         };
-       
+        
         // Handle command execution
         function executeCommand(cmd) {
             const parts = cmd.split(' ');
             const command = parts[0].toLowerCase();
             const args = parts.slice(1);
-           
+            
             if (commands[command]) {
                 return commands[command].execute(args);
             } else {
                 return `<span class="error">Command not found: ${command}</span>. Type 'help' to see available commands.`;
             }
         }
-       
+        
         // Display initial message
         output.innerHTML += `<div>> Welcome to my terminal portfolio. Type 'help' to get started.</div>`;
-       
+        
         // Handle command input
         commandInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -233,26 +278,49 @@ LinkedIn: <a href="${info.linkedin}" target="_blank">${info.linkedin}</a>
                 if (command) {
                     // Display the command
                     output.innerHTML += `<div>> ${command}</div>`;
-                   
+                    
                     // Execute and display output
                     const result = executeCommand(command);
                     if (result) {
-                        output.innerHTML += `<div>${result}</div>`;
+                        typeOutput(result);
                     }
-                   
+                    
                     // Clear input
                     commandInput.value = '';
-                   
+                    
                     // Scroll to bottom
                     output.scrollTop = output.scrollHeight;
                 }
             }
         });
-       
+        
         // Focus the input on page load and whenever clicked in the terminal
         document.addEventListener('click', () => {
             commandInput.focus();
         });
+        function typeOutput(text) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = text; // this parses the HTML into real nodes
+
+    const nodes = Array.from(tempDiv.childNodes);
+    const div = document.createElement("div");
+    output.appendChild(div);
+
+    let i = 0;
+
+    function typeNextNode() {
+        if (i < nodes.length) {
+            const node = nodes[i].cloneNode(true);
+            div.appendChild(node);
+            i++;
+            setTimeout(typeNextNode, 10);
+        } else {
+            div.innerHTML += '<br>';
+        }
+    }
+
+    typeNextNode();
+}
     </script>
 </body>
 </html>
