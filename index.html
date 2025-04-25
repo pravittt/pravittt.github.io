@@ -13,53 +13,56 @@
             padding: 20px;
             height: 100vh;
             white-space: pre-wrap;
-            
+            overflow: hidden;
         }
-        
+       
         #terminal {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 2px solid #4CAF50;
-    border-radius: 10px;
-    padding: 20px;
-    background-color: #121212;
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
-    box-sizing: content-box;
-}
-        
+            max-width: 800px;
+            height: 90vh;
+            margin: 0 auto;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #121212;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+       
         #header {
             margin-bottom: 10px;
             color: #4CAF50;
             text-align: center;
+            flex-shrink: 0;
         }
-        #output::-webkit-scrollbar {
-    width: 8px;
-}
-#output::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-#output::-webkit-scrollbar-thumb {
-    background-color: #4CAF50;
-    border-radius: 10px;
-}
-        #output {
+       
+        #output-container {
             flex-grow: 1;
             overflow-y: auto;
             margin-bottom: 10px;
-            line-height: 1.5;
+            scroll-behavior: smooth;
+            padding-right: 5px;
         }
-      
-        
+       
+        #output {
+            line-height: 1.5;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+       
         #input-line {
             display: flex;
             align-items: center;
+            flex-shrink: 0;
+            margin-top: 10px;
         }
-        
+       
         #prompt {
             color: #4CAF50;
             margin-right: 10px;
         }
-        
+       
         #command-input {
             background-color: transparent;
             border: none;
@@ -70,52 +73,70 @@
             outline: none;
             flex-grow: 1;
         }
-        
+       
         .command {
             color: #4CAF50;
             font-weight: bold;
         }
-        
+       
         .error {
             color: #f44336;
         }
-        
+       
         .info {
             color: #2196F3;
         }
-        
+       
         .success {
             color: #4CAF50;
         }
-        
+       
         a {
             color: #FF9800;
             text-decoration: none;
         }
-        
+       
         a:hover {
             text-decoration: underline;
         }
+       
         #output div {
-    white-space: pre-wrap;
-    overflow-y: auto;
-    line-height: 1.6;
-    font-size: 15px;
-    margin-bottom: 8px;
-}
-
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+       
+        /* Custom scrollbar */
+        #output-container::-webkit-scrollbar {
+            width: 10px;
+        }
+       
+        #output-container::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+       
+        #output-container::-webkit-scrollbar-thumb {
+            background-color: #4CAF50;
+            border-radius: 5px;
+            border: 2px solid #1a1a1a;
+        }
+       
+        #output-container::-webkit-scrollbar-thumb:hover {
+            background-color: #3e8e41;
+        }
     </style>
 </head>
 <body>
     <div id="terminal">
         <div id="header">
             <pre>
- 
-
-                
 
 
-         
+
+        
 
 ██████╗ ██████╗  █████╗ ██╗   ██╗██╗████████╗      
 ██╔══██╗██╔══██╗██╔══██╗██║   ██║██║╚══██╔══╝      
@@ -130,13 +151,23 @@
    ██║   ██║   ██║   ██║   ██╔══╝  ██   ██║██╔══██║
    ██║   ╚██████╔╝   ██║   ███████╗╚█████╔╝██║  ██║
    ╚═╝    ╚═════╝    ╚═╝   ╚══════╝ ╚════╝ ╚═╝  ╚═╝
-                                                
+                                                   
+
+
+                                                                   
+                
+                
+                                                                                                                    
+                
+                
             </pre>
             <p>Welcome to my interactive terminal. Type 'help' to see available commands.</p>
         </div>
-        
-        <div id="output"></div>
-        
+       
+        <div id="output-container">
+            <div id="output"></div>
+        </div>
+       
         <div id="input-line">
             <span id="prompt">$</span>
             <input type="text" id="command-input" autofocus>
@@ -145,8 +176,9 @@
 
     <script>
         const output = document.getElementById('output');
+        const outputContainer = document.getElementById('output-container');
         const commandInput = document.getElementById('command-input');
-        
+       
         // Your personal information
         const info = {
             name: "Pravit Tuteja",
@@ -171,7 +203,7 @@
                 {role: "Junior Developer", company: "Startup Inc", duration: "2018-2020"}
             ]
         };
-        
+       
         // Available commands
         const commands = {
             help: {
@@ -250,30 +282,29 @@ LinkedIn: <a href="${info.linkedin}" target="_blank">${info.linkedin}</a>
                 }
             },
             resume: {
-    description: "Download my resume",
-    execute: () => {
-        return `Download here: <a href="/assets/resume.pdf" target="_blank">My Resume</a>`;
-    }
-}
-
+                description: "Download my resume",
+                execute: () => {
+                    return `Download here: <a href="/assets/resume.pdf" target="_blank">My Resume</a>`;
+                }
+            }
         };
-        
+       
         // Handle command execution
         function executeCommand(cmd) {
             const parts = cmd.split(' ');
             const command = parts[0].toLowerCase();
             const args = parts.slice(1);
-            
+           
             if (commands[command]) {
                 return commands[command].execute(args);
             } else {
                 return `<span class="error">Command not found: ${command}</span>. Type 'help' to see available commands.`;
             }
         }
-        
+       
         // Display initial message
         output.innerHTML += `<div>> Welcome to my terminal portfolio. Type 'help' to get started.</div>`;
-        
+       
         // Handle command input
         commandInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -281,50 +312,62 @@ LinkedIn: <a href="${info.linkedin}" target="_blank">${info.linkedin}</a>
                 if (command) {
                     // Display the command
                     output.innerHTML += `<div>> ${command}</div>`;
-                    
+                   
                     // Execute and display output
                     const result = executeCommand(command);
                     if (result) {
                         typeOutput(result);
-                        output.scrollTop = output.scrollHeight;
                     }
-                    
+                   
                     // Clear input
                     commandInput.value = '';
-                    
+                   
                     // Scroll to bottom
-                    output.scrollTop = output.scrollHeight;
+                    scrollToBottom();
                 }
             }
         });
-        
+       
         // Focus the input on page load and whenever clicked in the terminal
         document.addEventListener('click', () => {
             commandInput.focus();
         });
+       
+        // Improved typing effect
         function typeOutput(text) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = text; // this parses the HTML into real nodes
-
-    const nodes = Array.from(tempDiv.childNodes);
-    const div = document.createElement("div");
-    output.appendChild(div);
-
-    let i = 0;
-
-    function typeNextNode() {
-        if (i < nodes.length) {
-            const node = nodes[i].cloneNode(true);
-            div.appendChild(node);
-            i++;
-            setTimeout(typeNextNode, 10);
-        } else {
-            div.innerHTML += '<br>';
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = text;
+            const nodes = Array.from(tempDiv.childNodes);
+            const div = document.createElement("div");
+            output.appendChild(div);
+           
+            let i = 0;
+            function typeNextNode() {
+                if (i < nodes.length) {
+                    const node = nodes[i].cloneNode(true);
+                    div.appendChild(node);
+                    i++;
+                    setTimeout(typeNextNode, 10);
+                    scrollToBottom();
+                } else {
+                    div.innerHTML += '<br>';
+                    scrollToBottom();
+                }
+            }
+            typeNextNode();
         }
-    }
-
-    typeNextNode();
-}
+       
+        // Smooth scroll to bottom
+        function scrollToBottom() {
+            outputContainer.scrollTo({
+                top: outputContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+       
+        // Auto-scroll when content changes
+        const observer = new MutationObserver(scrollToBottom);
+        observer.observe(output, { childList: true, subtree: true });
     </script>
 </body>
 </html>
