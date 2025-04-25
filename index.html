@@ -11,8 +11,9 @@
             font-family: 'Courier New', monospace;
             margin: 0;
             padding: 20px;
-            height: 100%;
-            overflow: hidden;
+            height: 100vh;
+            white-space: pre-wrap;
+            
         }
         
         #terminal {
@@ -23,7 +24,7 @@
     padding: 20px;
     background-color: #121212;
     box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
         
         #header {
@@ -43,7 +44,7 @@
 }
         #output {
             flex-grow: 1;
-            overflow-y: auto;
+            overflow-y: scroll;
             margin-bottom: 10px;
             line-height: 1.5;
         }
@@ -97,6 +98,7 @@
         }
         #output div {
     white-space: pre-wrap;
+    overflow-y: scroll;
     line-height: 1.6;
     font-size: 15px;
     margin-bottom: 8px;
